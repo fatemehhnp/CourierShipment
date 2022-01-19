@@ -7,6 +7,6 @@ namespace CourierShipment.Services
 {
     public interface ICourierServices
     {
-        double CalculateShipment(Parcel parcel);
+        double CalculateShipmentCost(Parcel parcel);
     }
 }

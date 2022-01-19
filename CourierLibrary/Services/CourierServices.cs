@@ -7,7 +7,7 @@ namespace CourierShipment.Services
 {
     public class CourierServices: ICourierServices
     {
-        public double CalculateShipment(Parcel parcel)
+        public double CalculateShipmentCost(Parcel parcel)
         {
             if (parcel.ParcelType == ParcelType.Small)
             {
