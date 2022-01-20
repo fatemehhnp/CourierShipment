@@ -9,22 +9,24 @@ namespace CourierShipment.Services
     {
         public double CalculateBasicShipmentCost(Parcel parcel)
         {
-            if (parcel.ParcelType == ParcelType.Small)
-            {
+            var weight = parcel.Weight;
+            var parcelType = parcel.ParcelType;
+            if (parcelType == ParcelType.Small && weight<=1)
                 return 3;
-            }
-            else if (parcel.ParcelType == ParcelType.Medium)
-            {
+            else if(parcelType== ParcelType.Small && weight> 1)
+                return (3 + ((weight - 1) * 2));
+            else if (parcelType == ParcelType.Medium && weight<=3)
                 return 8;
-            }
-            else if (parcel.ParcelType == ParcelType.Large)
-            {
+            else if (parcelType == ParcelType.Medium && weight>3)
+                return (8 + ((weight - 3) * 2));
+            else if (parcelType == ParcelType.Large && weight<=6)
                 return 15;
-            }
-            else
-            {
+            else if (parcelType == ParcelType.Large && weight > 6)
+                return (15 + ((weight - 6) * 2));
+            else if (parcelType == ParcelType.Xlarge && weight <=10)
                 return 25;
-            }
+            else
+                return (25 + ((weight - 10 )* 2));
         }
         public double CalculateShipmentCost(Parcel parcel)
         {

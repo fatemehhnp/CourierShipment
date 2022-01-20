@@ -106,17 +106,44 @@ namespace CourierShipment.Test
         public void CalculateBasicShipmentCost_WithWeightGreaterThanLimitSize_ShouldReturnMoreCost()
         {
             //Arrange
-            var parcel = new Parcel
+            var smallParcel = new Parcel
+            {
+                Dimension = 5,
+                ParcelType = ParcelType.Small,
+                FastSpeed = false,
+                Weight = 2
+            };
+            var mediumParcel = new Parcel
             {
                 Dimension = 30,
                 ParcelType = ParcelType.Medium,
                 FastSpeed = false,
                 Weight = 5
             };
+            var largeParcel = new Parcel
+            {
+                Dimension = 80,
+                ParcelType = ParcelType.Large,
+                FastSpeed = false,
+                Weight = 10
+            };
+            var xlargeParcel = new Parcel
+            {
+                Dimension = 150,
+                ParcelType = ParcelType.Xlarge,
+                FastSpeed = false,
+                Weight = 15
+            };
             //Act
-            var result = _sut.CalculateBasicShipmentCost(parcel);
+            var mediumResult = _sut.CalculateBasicShipmentCost(mediumParcel);
+            var smallResult = _sut.CalculateBasicShipmentCost(smallParcel);
+            var largeResult = _sut.CalculateBasicShipmentCost(largeParcel);
+            var xlargeResult = _sut.CalculateBasicShipmentCost(xlargeParcel);
             //Assert
-            Assert.Equal(12, result);
+            Assert.Equal(12, mediumResult);
+            Assert.Equal(5, smallResult);
+            Assert.Equal(23, largeResult);
+            Assert.Equal(35, xlargeResult);
         }
     }
 }
