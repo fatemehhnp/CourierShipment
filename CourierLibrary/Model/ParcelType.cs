@@ -5,6 +5,7 @@
         Small=1,
         Medium,
         Large,
-        Xlarge
+        Xlarge,
+        Heavy
     }
 }
