@@ -142,17 +142,17 @@ namespace CourierShipment.Test
                 Weight = 70
             };
             //Act
-            var mediumResult = _sut.CalculateBasicShipmentCost(mediumParcel);
-            var smallResult = _sut.CalculateBasicShipmentCost(smallParcel);
-            var largeResult = _sut.CalculateBasicShipmentCost(largeParcel);
-            var xlargeResult = _sut.CalculateBasicShipmentCost(xlargeParcel);
-            var heavyResult = _sut.CalculateBasicShipmentCost(heavyParcel);
+            var mediumResult = _sut.CalculateShipmentCost(mediumParcel);
+            var smallResult = _sut.CalculateShipmentCost(smallParcel);
+            var largeResult = _sut.CalculateShipmentCost(largeParcel);
+            var xlargeResult = _sut.CalculateShipmentCost(xlargeParcel);
+            var heavyResult = _sut.CalculateShipmentCost(heavyParcel);
             //Assert
             Assert.Equal(12, mediumResult);
             Assert.Equal(5, smallResult);
             Assert.Equal(23, largeResult);
             Assert.Equal(35, xlargeResult);
-            Assert.Equal(70, heavyResult);
+            Assert.Equal(140, heavyResult);
         }
     }
 }
