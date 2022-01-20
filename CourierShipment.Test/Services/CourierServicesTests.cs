@@ -17,7 +17,7 @@ namespace CourierShipment.Test
             _sut = new CourierServices();
         }
         [Fact]
-        public void CalculateShipmentCost_WithSmallType_ShouldReturn3()
+        public void CalculateBasicShipmentCost_WithSmallType_ShouldReturn3()
         {
             //Arrange
             var parcel = new Parcel
@@ -26,12 +26,12 @@ namespace CourierShipment.Test
                 ParcelType = ParcelType.Small
             };
             //Act
-            var result = _sut.CalculateShipmentCost(parcel);
+            var result = _sut.CalculateBasicShipmentCost(parcel);
             //Assert
             Assert.Equal(3, result);
         }
         [Fact]
-        public void CalculateShipmentCost_WithMediumType_ShouldReturn8()
+        public void CalculateBasicShipmentCost_WithMediumType_ShouldReturn8()
         {
             //Arrange
             var parcel = new Parcel
@@ -40,12 +40,12 @@ namespace CourierShipment.Test
                 ParcelType = ParcelType.Medium
             };
             //Act
-            var result = _sut.CalculateShipmentCost(parcel);
+            var result = _sut.CalculateBasicShipmentCost(parcel);
             //Assert
             Assert.Equal(8, result);
         }
         [Fact]
-        public void CalculateShipmentCost_WithLarge_ShouldReturn15()
+        public void CalculateBasicShipmentCost_WithLarge_ShouldReturn15()
         {
             //Arrange
             var parcel = new Parcel
@@ -54,12 +54,12 @@ namespace CourierShipment.Test
                 ParcelType = ParcelType.Large
             };
             //Act
-            var result = _sut.CalculateShipmentCost(parcel);
+            var result = _sut.CalculateBasicShipmentCost(parcel);
             //Assert
             Assert.Equal(15, result);
         }
         [Fact]
-        public void CalculateShipmentCost_WithXLargeType_ShouldReturn25()
+        public void CalculateBasicShipmentCost_WithXLargeType_ShouldReturn25()
         {
             //Arrange
             var parcel = new Parcel
@@ -68,9 +68,39 @@ namespace CourierShipment.Test
                 ParcelType = ParcelType.Xlarge
             };
             //Act
-            var result = _sut.CalculateShipmentCost(parcel);
+            var result = _sut.CalculateBasicShipmentCost(parcel);
             //Assert
             Assert.Equal(25, result);
+        }
+        [Fact]
+        public void CalculateShipmentCost_WithFastSpeedSetToTrue_ShouldReturnDoubleCost()
+        {
+            //Arrange
+            var parcel = new Parcel
+            {
+                Dimension = 5,
+                ParcelType = ParcelType.Small,
+                FastSpeed = true,
+            };
+            //Act
+            var result = _sut.CalculateShipmentCost(parcel);
+            //Assert
+            Assert.Equal(6, result);
+        }
+        [Fact]
+        public void CalculateShipmentCost_WithFastSpeedSetToFalse_ShouldReturnActualCost()
+        {
+            //Arrange
+            var parcel = new Parcel
+            {
+                Dimension = 30,
+                ParcelType = ParcelType.Medium,
+                FastSpeed = true,
+            };
+            //Act
+            var result = _sut.CalculateShipmentCost(parcel);
+            //Assert
+            Assert.Equal(8, result);
         }
     }
 }
