@@ -26,6 +26,11 @@ namespace CourierShipment.Services
                 return 25;
             }
         }
-        
+        public double CalculateShipmentCost(Parcel parcel)
+        {
+            return parcel.FastSpeed ? CalculateBasicShipmentCost(parcel) * 2 : CalculateBasicShipmentCost(parcel);
+        }
+
+
     }
 }

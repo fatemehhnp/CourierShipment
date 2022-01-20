@@ -95,7 +95,7 @@ namespace CourierShipment.Test
             {
                 Dimension = 30,
                 ParcelType = ParcelType.Medium,
-                FastSpeed = true,
+                FastSpeed = false,
             };
             //Act
             var result = _sut.CalculateShipmentCost(parcel);
