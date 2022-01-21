@@ -171,5 +171,46 @@ namespace CourierShipment.Test
             Assert.Equal(35, xlargeResult);
             Assert.Equal(70, heavyResult);
         }
+        [Fact]
+        public void CalculateOrderCost_With4SmallParcel_ShouldReturnDiscountAndUpdateTotalCost()
+        {
+            //Arrange
+            var order = new Order
+            {
+                Parcels = new List<Parcel>
+                {
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=5,
+                        Weight=1
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=7,
+                        Weight=2
+                    },
+                           new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=9,
+                        Weight=3
+                    },
+                              new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=4,
+                        Weight=1
+                    },
+                },
+                FastSpeed = false
+            };
+            //Act
+            var result = _sut.CalculateOrderCost(order);
+            //Assert
+            Assert.Equal(15, result.TotalCost);
+            Assert.Equal(-1, result.Discount);
+        }
     }
 }

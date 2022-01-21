@@ -32,6 +32,12 @@ namespace CourierShipment.Services
             else 
                 return (50 + (weight - 50));
         }
+
+        public Order CalculateOrderCost(Order order)
+        {
+            return new Order();
+        }
+
         public Order CalculateShipmentCostToConsiderFastShippment(Order order)
         {
             if (order.FastSpeed)

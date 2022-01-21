@@ -9,5 +9,6 @@ namespace CourierShipment.Services
     {
         double CalculateBasicShipmentCost(Parcel parcel);
         Order CalculateShipmentCostToConsiderFastShippment(Order parcel);
+        Order CalculateOrderCost(Order order);
     }
 }
