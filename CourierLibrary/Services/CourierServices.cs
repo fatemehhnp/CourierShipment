@@ -32,11 +32,12 @@ namespace CourierShipment.Services
             else 
                 return (50 + (weight - 50));
         }
-        public double CalculateShipmentCost(Parcel parcel)
+        public Order CalculateShipmentCostToConsiderFastShippment(Order order)
         {
-            return parcel.FastSpeed ? CalculateBasicShipmentCost(parcel) * 2 : CalculateBasicShipmentCost(parcel);
+            if (order.FastSpeed)
+                order.TotalCost = order.TotalCost * 2;
+            return order;
         }
-
 
     }
 }

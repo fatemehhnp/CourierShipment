@@ -73,86 +73,103 @@ namespace CourierShipment.Test
             Assert.Equal(25, result);
         }
         [Fact]
-        public void CalculateShipmentCost_WithFastSpeedSetToTrue_ShouldReturnDoubleCost()
+        public void CalculateShipmentCostToConsiderFastShippment_WithFastSpeedSetToTrue_ShouldReturnDoubleCost()
         {
             //Arrange
-            var parcel = new Parcel
+            var order = new Order
             {
-                Dimension = 5,
-                ParcelType = ParcelType.Small,
-                FastSpeed = true,
+                Parcels = new List<Parcel>
+                {
+                    new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=7,
+                        Weight=2
+                    }
+                },
+                FastSpeed=true
             };
+            foreach(var parcel in order.Parcels)
+            {
+              order.TotalCost+= _sut.CalculateBasicShipmentCost(parcel);
+            }
             //Act
-            var result = _sut.CalculateShipmentCost(parcel);
+            var result = _sut.CalculateShipmentCostToConsiderFastShippment(order);
             //Assert
-            Assert.Equal(6, result);
+            Assert.Equal(10, result.TotalCost);
         }
         [Fact]
-        public void CalculateShipmentCost_WithFastSpeedSetToFalse_ShouldReturnActualCost()
+        public void CalculateShipmentCostToConsiderFastShippmentt_WithFastSpeedSetToFalse_ShouldReturnActualCost()
         {
             //Arrange
-            var parcel = new Parcel
+            var order = new Order
             {
-                Dimension = 30,
-                ParcelType = ParcelType.Medium,
-                FastSpeed = false,
+                Parcels = new List<Parcel>
+                {
+                    new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=7,
+                        Weight=2
+                    }
+                },
+                FastSpeed = false
             };
+            foreach (var parcel in order.Parcels)
+            {
+                order.TotalCost += _sut.CalculateBasicShipmentCost(parcel);
+            }
             //Act
-            var result = _sut.CalculateShipmentCost(parcel);
+            var result = _sut.CalculateShipmentCostToConsiderFastShippment(order);
             //Assert
-            Assert.Equal(8, result);
+            Assert.Equal(5, result.TotalCost);
         }
         [Fact]
-        public void CalculateShipmentCost_WithWeightGreaterThanLimitSize_ShouldReturnMoreCost()
+        public void CalculateBasicShipmentCost_WithWeightGreaterThanLimitSize_ShouldReturnMoreCost()
         {
             //Arrange
             var smallParcel = new Parcel
             {
                 Dimension = 5,
                 ParcelType = ParcelType.Small,
-                FastSpeed = false,
                 Weight = 2
             };
             var mediumParcel = new Parcel
             {
                 Dimension = 30,
                 ParcelType = ParcelType.Medium,
-                FastSpeed = false,
                 Weight = 5
             };
             var largeParcel = new Parcel
             {
                 Dimension = 80,
                 ParcelType = ParcelType.Large,
-                FastSpeed = false,
                 Weight = 10
             };
             var xlargeParcel = new Parcel
             {
                 Dimension = 150,
                 ParcelType = ParcelType.Xlarge,
-                FastSpeed = false,
                 Weight = 15
             };
             var heavyParcel = new Parcel
             {
                 Dimension = 300,
                 ParcelType = ParcelType.Heavy,
-                FastSpeed = true,
                 Weight = 70
             };
             //Act
-            var mediumResult = _sut.CalculateShipmentCost(mediumParcel);
-            var smallResult = _sut.CalculateShipmentCost(smallParcel);
-            var largeResult = _sut.CalculateShipmentCost(largeParcel);
-            var xlargeResult = _sut.CalculateShipmentCost(xlargeParcel);
-            var heavyResult = _sut.CalculateShipmentCost(heavyParcel);
+            var mediumResult = _sut.CalculateBasicShipmentCost(mediumParcel);
+            var smallResult = _sut.CalculateBasicShipmentCost(smallParcel);
+            var largeResult = _sut.CalculateBasicShipmentCost(largeParcel);
+            var xlargeResult = _sut.CalculateBasicShipmentCost(xlargeParcel);
+            var heavyResult = _sut.CalculateBasicShipmentCost(heavyParcel);
             //Assert
             Assert.Equal(12, mediumResult);
             Assert.Equal(5, smallResult);
             Assert.Equal(23, largeResult);
             Assert.Equal(35, xlargeResult);
-            Assert.Equal(140, heavyResult);
+            Assert.Equal(70, heavyResult);
         }
     }
 }
