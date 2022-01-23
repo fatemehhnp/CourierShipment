@@ -7,6 +7,7 @@ namespace CourierLibrary.Model
     public class Parcel
     {
         public decimal Dimension { get; set; }
+        public double Cost { get; set; }
         public ParcelType ParcelType { get; set; }
         public double Weight { get; set; }
     }

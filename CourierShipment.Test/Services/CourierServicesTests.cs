@@ -73,58 +73,6 @@ namespace CourierShipment.Test
             Assert.Equal(25, result);
         }
         [Fact]
-        public void CalculateShipmentCostToConsiderFastShippment_WithFastSpeedSetToTrue_ShouldReturnDoubleCost()
-        {
-            //Arrange
-            var order = new Order
-            {
-                Parcels = new List<Parcel>
-                {
-                    new Parcel
-                    {
-                        ParcelType=ParcelType.Small,
-                        Dimension=7,
-                        Weight=2
-                    }
-                },
-                FastSpeed=true
-            };
-            foreach(var parcel in order.Parcels)
-            {
-              order.TotalCost+= _sut.CalculateBasicShipmentCost(parcel);
-            }
-            //Act
-            var result = _sut.CalculateShipmentCostToConsiderFastShippment(order);
-            //Assert
-            Assert.Equal(10, result.TotalCost);
-        }
-        [Fact]
-        public void CalculateShipmentCostToConsiderFastShippmentt_WithFastSpeedSetToFalse_ShouldReturnActualCost()
-        {
-            //Arrange
-            var order = new Order
-            {
-                Parcels = new List<Parcel>
-                {
-                    new Parcel
-                    {
-                        ParcelType=ParcelType.Small,
-                        Dimension=7,
-                        Weight=2
-                    }
-                },
-                FastSpeed = false
-            };
-            foreach (var parcel in order.Parcels)
-            {
-                order.TotalCost += _sut.CalculateBasicShipmentCost(parcel);
-            }
-            //Act
-            var result = _sut.CalculateShipmentCostToConsiderFastShippment(order);
-            //Assert
-            Assert.Equal(5, result.TotalCost);
-        }
-        [Fact]
         public void CalculateBasicShipmentCost_WithWeightGreaterThanLimitSize_ShouldReturnMoreCost()
         {
             //Arrange
@@ -172,7 +120,7 @@ namespace CourierShipment.Test
             Assert.Equal(70, heavyResult);
         }
         [Fact]
-        public void CalculateOrderCost_With4SmallParcel_ShouldReturnDiscountAndUpdateTotalCost()
+        public void CalculateOrderCost_With4SmallParcels_ShouldReturnRelatedDiscountAndUpdateTotalCost()
         {
             //Arrange
             var order = new Order
@@ -210,6 +158,88 @@ namespace CourierShipment.Test
             var result = _sut.CalculateOrderCost(order);
             //Assert
             Assert.Equal(15, result.TotalCost);
+            Assert.Equal(-1, result.Discount);
+        }
+        [Fact]
+        public void CalculateOrderCost_With3MediumParcels_ShouldReturnRelatedDiscountAndUpdateTotalCost()
+        {
+            //Arrange
+            var order = new Order
+            {
+                Parcels = new List<Parcel>
+                {
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=20,
+                        Weight=2
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=45,
+                        Weight=4
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=35,
+                        Weight=3
+                    },
+                },
+                FastSpeed = false
+            };
+            //Act
+            var result = _sut.CalculateOrderCost(order);
+            //Assert
+            Assert.Equal(18, result.TotalCost);
+            Assert.Equal(-1, result.Discount);
+        }
+        [Fact]
+        public void CalculateOrderCost_With5MixedParcels_ShouldReturnRelatedDiscountAndUpdateTotalCost()
+        {
+            //Arrange
+            var order = new Order
+            {
+                Parcels = new List<Parcel>
+                {
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=20,
+                        Weight=2
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=7,
+                        Weight=3
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Large,
+                        Dimension=70,
+                        Weight=7
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Xlarge,
+                        Dimension=120,
+                        Weight=12
+                    },
+                        new Parcel
+                    {
+                        ParcelType=ParcelType.Small,
+                        Dimension=7,
+                        Weight=4
+                    },
+                },
+                FastSpeed = true
+            };
+            //Act
+            var result = _sut.CalculateOrderCost(order);
+            //Assert
+            Assert.Equal(126, result.TotalCost);
             Assert.Equal(-1, result.Discount);
         }
     }
