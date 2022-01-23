@@ -99,12 +99,23 @@ namespace CourierShipment.Services
                 double totalCost = order.TotalCost;
                 var offerParcels = order.Parcels.Where(x => x.ParcelType == type);
                 var discount = offerParcels.Count() / offerNumber;
-                for (var i = 1; i <= discount;i++)
-                {
-                    var CheapestCost = offerParcels.Min(p => p.Cost);
-                    totalCost -= CheapestCost;
-                    offerParcels = offerParcels.OrderBy(x => x.Cost).Skip(i);
+                for (var i = 1; i <= discount; i++) 
+                    {
+                        var test = offerParcels.GroupBy(x => x.Cost).ToDictionary(g => g.Key, g => g.ToList());
+                        if (test.Keys.Count() == discount)
+                        {
+                            var cheapestCost = test.Values.FirstOrDefault().Select(p => p.Cost).FirstOrDefault();
+                            totalCost -= cheapestCost;
+                            offerParcels = offerParcels.OrderBy(x => x.Cost).Skip(offerNumber);
+                        }
+                        else
+                        {
+                            var cheapestCost = offerParcels.Min(p => p.Cost);
+                            totalCost -= cheapestCost;
+                            offerParcels = offerParcels.OrderBy(x => x.Cost).Skip(i);
                 }
+            }
+                
                 return (discount, totalCost);
             }
             else
