@@ -360,5 +360,58 @@ namespace CourierShipment.Test
             Assert.Equal(36, result.TotalCost);
             Assert.Equal(-2, result.Discount);
         }
+        [Fact]
+        public void CalculateOrderCost_With6SMediumParcelsAndFastShipmentSetToTrue_ShouldReturnRelatedDiscountWithBestSavingsAndUpdateTotalCostWithDoublePrice()
+        {
+            //Arrange
+            var order = new Order
+            {
+                Parcels = new List<Parcel>
+                {
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=30,
+                        Weight=2
+                    },
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=35,
+                        Weight=3
+                    },
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=45,
+                        Weight=3
+                    },
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=48,
+                        Weight=4
+                    },
+                   new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=50,
+                        Weight=4
+                    },
+                     new Parcel
+                    {
+                        ParcelType=ParcelType.Medium,
+                        Dimension=49,
+                        Weight=4
+                    },
+                },
+                FastSpeed = true
+            };
+            //Act
+            var result = _sut.CalculateOrderCost(order);
+            //Assert
+            Assert.Equal(72, result.TotalCost);
+            Assert.Equal(-2, result.Discount);
+        }
     }
 }
