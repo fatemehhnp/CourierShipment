@@ -48,54 +48,78 @@ namespace CourierShipment.Services
             var smallSizeCount = order.Parcels.Count(x => x.ParcelType == ParcelType.Small);
             var mediumSizeCount = order.Parcels.Count(x => x.ParcelType == ParcelType.Medium);
             var mixedCount = order.Parcels.Count();
+            var discountList = new List<Order>();
+            var disCountApplied = false;
             if (smallSizeCount >= Constants.SmallSizeOffer)
             {
-                order = CalculateDiscount(order, smallSizeOffer, ParcelType.Small);
+                var newDiscount = CalculateDiscount(order, smallSizeOffer, ParcelType.Small);
+                discountList.Add(new Order
+                {
+                    Parcels = order.Parcels,
+                    Discount =- newDiscount.Item1,
+                    TotalCost = newDiscount.Item2,
+                    FastSpeed = order.FastSpeed
+                });
+                disCountApplied = true;
             }
             if (mediumSizeCount >= Constants.MediumSizeOffer)
             {
-                order = CalculateDiscount(order, mediumSizeOffer, ParcelType.Medium);
+                var newDiscount = CalculateDiscount(order, mediumSizeOffer,ParcelType.Medium);
+                discountList.Add(new Order
+                {
+                    Parcels = order.Parcels,
+                    Discount = -newDiscount.Item1,
+                    TotalCost = newDiscount.Item2,
+                    FastSpeed = order.FastSpeed
+                });
+                disCountApplied = true;
             }
             if (mixedCount >= Constants.MixedOffer)
             {
-                order = CalculateDiscount(order, mixedOffer);
+                var newDiscount = CalculateDiscount(order, mixedOffer);
+                discountList.Add(new Order
+                {
+                    Parcels = order.Parcels,
+                    Discount = -newDiscount.Item1,
+                    TotalCost = newDiscount.Item2,
+                    FastSpeed = order.FastSpeed
+                });
+                disCountApplied = true;
             }
+            if (disCountApplied) order = discountList.Where(x => x.Discount != 0).OrderBy(x => x.TotalCost).FirstOrDefault();
             order.TotalCost = order.FastSpeed ? order.TotalCost * 2 : order.TotalCost;
             return order;
 
         }
-        private Order CalculateDiscount(Order order, int offerNumber, ParcelType? type = null)
+        private (int ,double) CalculateDiscount(Order order, int offerNumber, ParcelType? type = null)
         {
+
             if (type != null)
             {
+                double totalCost = order.TotalCost;
                 var offerParcels = order.Parcels.Where(x => x.ParcelType == type);
-                var discountGroup = offerParcels.Count() / offerNumber;
-                if (discountGroup == 1)
+                var discount = offerParcels.Count() / offerNumber;
+                for (var i = 1; i <= discount;i++)
                 {
                     var CheapestCost = offerParcels.Min(p => p.Cost);
-                    order.Discount = -1;
-                    order.TotalCost -= CheapestCost;
-                    return order;
+                    totalCost -= CheapestCost;
+                    offerParcels = offerParcels.OrderBy(x => x.Cost).Skip(i);
                 }
-                else
-                {
-                    return new Order();
-                }
+                return (discount, totalCost);
             }
             else
             {
-                var discountGroup = order.Parcels.Count() / offerNumber;
-                if (discountGroup == 1)
+                var parcels = order.Parcels;
+                var totalCost = order.TotalCost;
+                var discount = parcels.Count() / offerNumber;
+                order.Discount = -discount;
+                for (var i = 1; i <= discount; i++)
                 {
-                    var CheapestCost = order.Parcels.Min(p => p.Cost);
-                    order.Discount = -1;
-                    order.TotalCost -= CheapestCost;
-                    return order;
+                    var CheapestCost = parcels.Min(p => p.Cost);
+                    totalCost-= CheapestCost;
+                    parcels = parcels.OrderBy(x => x.Cost).Skip(i);
                 }
-                else
-                {
-                    return new Order();
-                }
+                return (discount,totalCost);
             }
         }
     }

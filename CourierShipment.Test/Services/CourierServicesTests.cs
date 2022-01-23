@@ -272,13 +272,13 @@ namespace CourierShipment.Test
                     {
                         ParcelType=ParcelType.Small,
                         Dimension=4,
-                        Weight=1
+                        Weight=2
                     },
                    new Parcel
                     {
                         ParcelType=ParcelType.Small,
                         Dimension=5,
-                        Weight=1
+                        Weight=2
                     },
                      new Parcel
                     {
@@ -296,7 +296,7 @@ namespace CourierShipment.Test
                     {
                         ParcelType=ParcelType.Small,
                         Dimension=4,
-                        Weight=1
+                        Weight=2
                     },
                 },
                 FastSpeed = false
@@ -304,7 +304,7 @@ namespace CourierShipment.Test
             //Act
             var result = _sut.CalculateOrderCost(order);
             //Assert
-            Assert.Equal(30, result.TotalCost);
+            Assert.Equal(34, result.TotalCost);
             Assert.Equal(-2, result.Discount);
         }
     }
