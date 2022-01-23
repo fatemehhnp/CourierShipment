@@ -101,10 +101,10 @@ namespace CourierShipment.Services
                 var discount = offerParcels.Count() / offerNumber;
                 for (var i = 1; i <= discount; i++) 
                     {
-                        var test = offerParcels.GroupBy(x => x.Cost).ToDictionary(g => g.Key, g => g.ToList());
-                        if (test.Keys.Count() == discount)
+                        var groupByPrice = offerParcels.GroupBy(x => x.Cost).ToDictionary(g => g.Key, g => g.ToList());
+                        if (groupByPrice.Keys.Count() == discount)
                         {
-                            var cheapestCost = test.Values.FirstOrDefault().Select(p => p.Cost).FirstOrDefault();
+                            var cheapestCost = groupByPrice.Values.FirstOrDefault().Select(p => p.Cost).FirstOrDefault();
                             totalCost -= cheapestCost;
                             offerParcels = offerParcels.OrderBy(x => x.Cost).Skip(offerNumber);
                         }
